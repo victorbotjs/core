@@ -1,0 +1,26 @@
+{
+  "name": "@victorbotjs/core",
+  "version": "1.0.0",
+  "description": "A modular, composable bot framework.",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victorbotjs/core.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "types": "dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/victorbotjs/core/issues"
+  },
+  "homepage": "https://github.com/victorbotjs/core#readme",
+  "prepublish": "tsc",
+  "dependencies": {
+    "discord.js": "^12.5.1"
+  }
+}
