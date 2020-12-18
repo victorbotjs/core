@@ -8,11 +8,13 @@ import IMiddleware from "./interfaces/IMiddleware"
 
 // Types
 import BotOptions from "./types/BotOptions"
-
+import DiscordBotConfiguration from "./types/DiscordBotConfiguration"
+import YouTubeBotConfiguration from "./types/YouTubeBotConfiguration"
 
 export {
   Bot,
   ICommand,
   IMiddleware,
-  BotOptions
+  BotOptions,
+  YouTubeBotConfiguration
 }

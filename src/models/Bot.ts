@@ -8,18 +8,11 @@ class Bot {
   _isRunning = false;
   _middleware?: IMiddleware[];
   _commands: CommandCollection = {};
-  _prefix: string;
-  _token: string;
-  _client: Client;
+  _discordClient?: Client;
   _options: BotOptions = {};
 
-  constructor(prefix: string, token: string, options: BotOptions) {
-    this._prefix = prefix;
-    this._token = token;
-    this._client = new Discord.Client();
-    if(options) {
-      this._options = options;
-    }
+  constructor(options: BotOptions) {
+    this._options = options;
   }
 
   use(middleware: IMiddleware) {
@@ -39,18 +32,28 @@ class Bot {
       return
     }
 
-    if(this._options.onReady !== undefined) {
-      this._client.on("on", this._options.onReady)
+    if(this._options.discordBotConfig !== undefined) {
+      let { prefix, token } = this._options.discordBotConfig;
+      this.runDiscordClient(prefix, token)
+      this._isRunning = true;
     }
 
-    this._client.on("message", async (message: Message) => {
+  }
+
+  private runDiscordClient(prefix: string, token: string) {
+    const client = new Client()
+    if(this._options.onReady !== undefined) {
+      client.on("on", this._options.onReady)
+    }
+
+    client.on("message", async (message: Message) => {
       if(message.author.bot && this._options.allowBotToBotInteraction !== true) return;
 
       if(this._middleware !== undefined) {
         this._middleware.forEach(mw => mw.exec(message))
       }
 
-      if(message.content.startsWith(this._prefix)) {
+      if(message.content.startsWith(prefix)) {
         const cmd = message.content.split(' ')[1];
         if(this._commands[cmd]) {
           this._commands[cmd](message)
@@ -58,8 +61,7 @@ class Bot {
       }
     })
 
-    this._client.login(this._token)
-    this._isRunning = true;
+    client.login(token)
   }
 }
 
