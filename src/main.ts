@@ -1,11 +1,18 @@
-export default {
-  // Models
-  Bot: import("./models/Bot"),
 
-  // Interfaces
-  ICommand: import("./interfaces/ICommand"),
-  IMiddleware: import("./interfaces/IMiddleware"),
-  
-  // Types
-  BotOptions: import("./types/BotOptions")
+// Models
+import Bot from "./models/Bot"
+
+// Interfaces
+import ICommand from "./interfaces/ICommand"
+import IMiddleware from "./interfaces/IMiddleware"
+
+// Types
+import BotOptions from "./types/BotOptions"
+
+
+export {
+  Bot,
+  ICommand,
+  IMiddleware,
+  BotOptions
 }

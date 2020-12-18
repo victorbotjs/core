@@ -1,10 +1,10 @@
 import Discord, { Client, ClientEvents, Message } from "discord.js"
-import { BotOptions } from "../types/BotOptions"
-import { IMiddleware } from "../interfaces/IMiddleware"
-import { ICommand } from "../interfaces/ICommand"
-import { CommandCollection } from "../types/CommandCollection";
+import BotOptions from "../types/BotOptions"
+import IMiddleware from "../interfaces/IMiddleware"
+import ICommand from "../interfaces/ICommand"
+import CommandCollection from "../types/CommandCollection";
 
-export class Bot {
+class Bot {
   _isRunning = false;
   _middleware?: IMiddleware[];
   _commands: CommandCollection = {};
@@ -40,7 +40,6 @@ export class Bot {
     }
 
     if(this._options.onReady !== undefined) {
-      // @ts-ignore TODO: (@bmorrisondev) Figure out how to fix this
       this._client.on("on", this._options.onReady)
     }
 
@@ -63,3 +62,5 @@ export class Bot {
     this._isRunning = true;
   }
 }
+
+export default Bot

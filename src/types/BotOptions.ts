@@ -1,4 +1,8 @@
-export type BotOptions = {
+import { Message } from "discord.js"
+
+type BotOptions = {
   allowBotToBotInteraction?: boolean;
-  onReady?: Function;
+  onReady?(message: Message): void;
 }
+
+export default BotOptions

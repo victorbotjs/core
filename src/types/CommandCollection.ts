@@ -1,3 +1,5 @@
-export type CommandCollection = {
+type CommandCollection = {
   [key: string]: Function
 }
+
+export default CommandCollection
