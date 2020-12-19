@@ -1,12 +1,12 @@
 import Discord, { Client, ClientEvents, Message } from "discord.js"
 import { BotOptions } from "../types/BotOptions"
-import { IMiddleware } from "../interfaces/IMiddleware"
-import { ICommand } from "../interfaces/ICommand"
+import { IDiscordMiddleware } from "../interfaces/IDiscordMiddleware"
+import { IDiscordCommand } from "../interfaces/IDiscordCommand"
 import { CommandCollection } from "../types/CommandCollection";
 
 export class Bot {
   _isRunning = false;
-  _middleware?: IMiddleware[];
+  _middleware?: IDiscordMiddleware[];
   _commands: CommandCollection = {};
   _prefix: string;
   _token: string;
@@ -22,14 +22,14 @@ export class Bot {
     }
   }
 
-  use(middleware: IMiddleware) {
+  use(middleware: IDiscordMiddleware) {
     if(this._middleware === undefined) {
-      this._middleware = new Array<IMiddleware>()
+      this._middleware = new Array<IDiscordMiddleware>()
     }
     this._middleware.push(middleware)
   }
 
-  addCommand(command: ICommand) {
+  addCommand(command: IDiscordCommand) {
     this._commands[command.commandText] = command.exec
   }
 

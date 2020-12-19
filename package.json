@@ -21,6 +21,7 @@
   "homepage": "https://github.com/victorbotjs/core#readme",
   "prepublish": "tsc",
   "dependencies": {
-    "discord.js": "^12.5.1"
+    "discord.js": "^12.5.1",
+    "tmi.js": "^1.7.0"
   }
 }

@@ -1,3 +1,5 @@
+import ICommand from "../interfaces/ICommand";
+
 export type CommandCollection = {
-  [key: string]: Function
+  [key: string]: ICommand
 }
