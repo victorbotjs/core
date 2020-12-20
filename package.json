@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/victorbotjs/core#readme",
   "dependencies": {
-    "discord.js": "^12.5.1"
+    "discord.js": "^12.5.1",
+    "yt-livechat": "^2.1.1"
   }
 }

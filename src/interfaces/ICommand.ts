@@ -1,5 +1,6 @@
-import { Message } from "discord.js";
+import Message from "../models/Message";
 import DiscordCommandConfig from "../types/DiscordCommandConfig";
+
 
 interface ICommand {
   discordCommandConfig?: DiscordCommandConfig;

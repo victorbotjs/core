@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import Message from "../models/Message";
 
 interface IMiddleware {
   exec(message: Message): void;

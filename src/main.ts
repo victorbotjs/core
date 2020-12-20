@@ -16,5 +16,6 @@ export {
   ICommand,
   IMiddleware,
   BotOptions,
+  DiscordBotConfiguration,
   YouTubeBotConfiguration
 }
