@@ -1,4 +1,4 @@
-import { BotOptions } from "../types/BotOptions"
+import BotOptions from "../types/BotOptions"
 import { ITwitchMiddleware } from "./ITwitchMiddleware";
 import { IDiscordMiddleware } from "./IDiscordMiddleware";
 
@@ -7,8 +7,8 @@ export default interface IBot {
     run: Function,
     _isRunning: boolean,
     _middleware?: ITwitchMiddleware[] | IDiscordMiddleware[],
-    _prefix: string,
+    _prefix?: string,
     _client:any,
     _options: BotOptions,
-    handleMessage: Function
+
 }

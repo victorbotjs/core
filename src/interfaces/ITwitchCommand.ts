@@ -1,5 +1,4 @@
-
 export interface ITwitchCommand {
   commandText: string;
-  exec(channel: string, tags: Object, message: string): Function;
+  exec(channel: string, tags: object, message: string): Function;
 }

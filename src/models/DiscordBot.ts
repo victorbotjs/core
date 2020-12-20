@@ -1,39 +1,29 @@
 import Discord, { Client, ClientEvents, Message } from "discord.js"
-import { BotOptions } from "../types/BotOptions"
+import BotOptions from "../types/BotOptions"
 import { IDiscordMiddleware } from "../interfaces/IDiscordMiddleware"
-import { IDiscordCommand } from "../interfaces/IDiscordCommand"
-import { CommandCollection } from "../types/CommandCollection";
-
-export class Bot {
-  _isRunning = false;
+import { BotCore } from './BotCore';
+import IDiscordMsgHandler from "../interfaces/IDiscordMsgHandler";
+export class DiscordBot extends BotCore implements IDiscordMsgHandler  {
   _middleware?: IDiscordMiddleware[];
-  _commands: CommandCollection = {};
-  _prefix: string;
-  _token: string;
-  _client: Client;
-  _options: BotOptions = {};
 
-  constructor(prefix: string, token: string, options: BotOptions) {
-    this._prefix = prefix;
-    this._token = token;
+  constructor(options: BotOptions,  commandsDir?: string) {
+    super(options, commandsDir);
+    if(!options.discordBotConfig){
+      throw new Error("Must pass Discord Bot configuration options.")
+    }
+    this.initializeClient()
+  }
+
+  initializeClient(){
     this._client = new Discord.Client();
-    if(options) {
-      this._options = options;
-    }
-  }
-
-  use(middleware: IDiscordMiddleware) {
-    if(this._middleware === undefined) {
-      this._middleware = new Array<IDiscordMiddleware>()
-    }
-    this._middleware.push(middleware)
-  }
-
-  addCommand(command: IDiscordCommand) {
-    this._commands[command.commandText] = command.exec
   }
 
   run() {
+
+    if(!this._options.discordBotConfig){
+      throw new Error("This bot should have discord options")
+    }
+
     if(this._isRunning === true) {
       console.warn("Bot is already running...")
       return
@@ -44,22 +34,23 @@ export class Bot {
       this._client.on("on", this._options.onReady)
     }
 
-    this._client.on("message", async (message: Message) => {
-      if(message.author.bot && this._options.allowBotToBotInteraction !== true) return;
-
-      if(this._middleware !== undefined) {
-        this._middleware.forEach(mw => mw.exec(message))
-      }
-
-      if(message.content.startsWith(this._prefix)) {
-        const cmd = message.content.split(' ')[1];
-        if(this._commands[cmd]) {
-          this._commands[cmd](message)
-        }
-      }
-    })
-
-    this._client.login(this._token)
+    this._client.on("message", this.handleMessage)
+    
+    const {token} = this._options.discordBotConfig;
+    this._client.login(token)
     this._isRunning = true;
+  }
+
+  handleMessage(message: Message):void {
+    if(message.author.bot && this._options.allowBotToBotInteraction !== true) return;
+
+    if(this._middleware !== undefined) {
+      this._middleware.forEach(mw => mw.exec(message))
+    }
+
+    const cmd = this.getCommandFromMessage(message.content);
+    if(cmd !== null && this._commands[cmd]) {
+      this._commands[cmd].exec(message)
+    }
   }
 }

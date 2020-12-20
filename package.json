@@ -23,5 +23,8 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "tmi.js": "^1.7.0"
+  },
+  "devDependencies": {
+    "@types/tmi.js": "^1.4.2"
   }
 }
