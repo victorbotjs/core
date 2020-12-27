@@ -1,11 +1,11 @@
-import Discord, { Client } from "discord.js"
+import Discord, { Client, Message } from "discord.js"
 import BotOptions from "../types/BotOptions"
 import IMiddleware from "../interfaces/IMiddleware"
 import ICommand from "../interfaces/ICommand"
 import CommandCollection from "../types/CommandCollection";
 import DiscordBotConfiguration from "../types/DiscordBotConfiguration";
 import YouTubeBotConfiguration from "../types/YouTubeBotConfiguration";
-import Message from "./Message";
+// import Message from "./Message";
 
 class Bot {
   private _isRunning = false;
@@ -39,10 +39,10 @@ class Bot {
       this._isRunning = true;
     }
 
-    if(this._options.youtubeBotConfig !== undefined) {
-      this.runYouTubeClient(this._options.youtubeBotConfig)
-      this._isRunning = true;
-    }
+    // if(this._options.youtubeBotConfig !== undefined) {
+    //   this.runYouTubeClient(this._options.youtubeBotConfig)
+    //   this._isRunning = true;
+    // }
   }
 
   private execMiddleware(message: Message) {
@@ -54,13 +54,15 @@ class Bot {
   private runDiscordClient(options: DiscordBotConfiguration) {
     const client = new Client()
     if(this._options.onReady !== undefined) {
-      client.on("on", this._options.onReady)
+      // @ts-ignore TODO: Figure out why TS hates this
+      client.on("ready", this._options.onReady)
     }
 
-    client.on("message", async (discordMessage: Discord.Message) => {
-      if(discordMessage.author.bot && this._options.allowBotToBotInteraction !== true) return;
+    // client.on("message", async (discordMessage: Discord.Message) => {
+    client.on("message", async (message: Discord.Message) => {
+      if(message.author.bot && this._options.allowBotToBotInteraction !== true) return;
 
-      const message = new Message(discordMessage);
+      // const message = new Message(discordMessage);
       
       this.execMiddleware(message);
 
