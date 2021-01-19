@@ -1,11 +1,12 @@
 
 // Models
 import Bot from "./models/Bot"
+import DiscordCommandBase from "./models/DiscordCommandBase"
 
 // Interfaces
 import ICommand from "./interfaces/ICommand"
 import IMiddleware from "./interfaces/IMiddleware"
-import IDatastore from "./interfaces/IDatastore"
+import IDatastoreAdapter from "./interfaces/IDatastoreAdapter"
 
 // Types
 import BotOptions from "./types/BotOptions"
@@ -16,7 +17,8 @@ export {
   Bot,
   ICommand,
   IMiddleware,
-  IDatastore,
+  IDatastoreAdapter,
   BotOptions,
-  DiscordBotConfiguration
+  DiscordBotConfiguration,
+  DiscordCommandBase
 }

@@ -7,6 +7,7 @@ type BotOptions = {
   youtubeBotConfig?: YouTubeBotConfiguration;
   allowBotToBotInteraction?: boolean;
   onReady?(message: Message): void;
+  enableApi?: boolean;
 }
 
 export default BotOptions

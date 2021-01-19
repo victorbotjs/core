@@ -1,12 +1,13 @@
 {
   "name": "@victorbotjs/core",
-  "version": "1.0.10",
+  "version": "1.0.10-dev.5",
   "description": "A modular, composable bot framework.",
   "main": "dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "prepare": "tsc"
+    "prepare": "tsc",
+    "deploy": ""
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,6 @@
   },
   "homepage": "https://github.com/victorbotjs/core#readme",
   "dependencies": {
-    "discord.js": "^12.5.1",
-    "yt-livechat": "^2.1.1"
+    "discord.js": "^12.5.1"
   }
 }

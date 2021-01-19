@@ -1,9 +1,10 @@
 import { Message } from 'discord.js'
+import CommandTypeEnum from '../enums/CommandTypeEnum';
 import DiscordCommandConfig from "../types/DiscordCommandConfig";
 
 interface ICommand {
-  discordCommandConfig?: DiscordCommandConfig;
-  commandText: string;
+  type: CommandTypeEnum;
+  config?: DiscordCommandConfig;
   exec(message: Message): void;
 }
 
