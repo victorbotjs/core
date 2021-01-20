@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
 import CommandTypeEnum from "../enums/CommandTypeEnum";
 import ICommand from "../interfaces/ICommand";
+import { Context } from "../main";
 import DiscordCommandConfig from "../types/DiscordCommandConfig";
 
 class DiscordCommandBase implements ICommand {
@@ -11,7 +12,7 @@ class DiscordCommandBase implements ICommand {
     this.config = config
   }
 
-  exec(message: Message): void {
+  exec(context: Context): void {
     throw new Error("Method not implemented.");
   }
 }

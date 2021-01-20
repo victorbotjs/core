@@ -3,3 +3,5 @@ enum UsableTypeEnum {
   Command = 1,
   Middleware = 2
 }
+
+export default UsableTypeEnum

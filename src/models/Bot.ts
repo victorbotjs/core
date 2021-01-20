@@ -4,11 +4,11 @@ import IMiddleware from "../interfaces/IMiddleware"
 import CommandCollection from "../types/CommandCollection";
 import DiscordBotConfiguration from "../types/DiscordBotConfiguration";
 import YouTubeBotConfiguration from "../types/YouTubeBotConfiguration";
-import IDatastore from "../interfaces/IDatastoreAdapter";
 import DiscordCommandBase from "./DiscordCommandBase";
 import MiddlewareBase from "./MiddlewareBase";
 import Context from "./Context";
 import IDatastoreAdapter from "../interfaces/IDatastoreAdapter";
+import PluginBase from "./PluginBase"
 // import Message from "./Message";
 
 class Bot {
@@ -16,33 +16,74 @@ class Bot {
   private _middleware?: MiddlewareBase[];
   private _commands: CommandCollection = {};
   private readonly _options: BotOptions = {};
-  private _datastoreAdapters?: IDatastoreAdapter[];
+  private _datastoreAdapter?: IDatastoreAdapter;
 
   constructor(options: BotOptions) {
     this._options = options;
   }
 
-  use(usable: Plugin | DiscordCommandBase | MiddlewareBase) {
-    if(typeof(usable) === typeof(Plugin)) {
-      // TODO: Implement
-    }
-
-    if(usable instanceof DiscordCommandBase) {
-      const command = usable as DiscordCommandBase
-      this._commands[command.config.commandText] = command.exec
-    }
-
-    if(usable instanceof MiddlewareBase) {
-      if(this._middleware === undefined) {
-        this._middleware = []
-      }
-      this._middleware.push(usable as MiddlewareBase)
+  private log(...args: any) {
+    if(this._options.debugMode) {
+      console.log(...args)
     }
   }
 
-  addDatastore(datastore: IDatastore) {
-    if(this._datastoreAdapters === undefined) {
-      this._datastoreAdapters 
+  use(usable: PluginBase | DiscordCommandBase | MiddlewareBase) {
+    if(usable instanceof PluginBase) {
+      this.registerPlugin(usable as PluginBase)
+    }
+
+    if(usable instanceof DiscordCommandBase) {
+      this.registerCommand(usable as DiscordCommandBase)
+    }
+
+    if(usable instanceof MiddlewareBase) {
+      this.registerMiddleware(usable as MiddlewareBase)
+    }
+  }
+
+  private registerPlugin(plugin: PluginBase) {
+    this.log('Registering plugin: ', plugin)
+    if(plugin.commands !== undefined) {
+      this.log('Registering plugin commands: ', plugin.commands)
+      if(plugin.commands instanceof Array) {
+        this.log('Array of commands')
+        plugin.commands.forEach((cmd: DiscordCommandBase) => this.registerCommand(cmd))
+      } else {
+        this.log('Single command')
+        this.registerCommand(plugin.commands as DiscordCommandBase)
+      }
+    }
+
+    if(plugin.middleware !== undefined) {
+      this.log('Registering plugin middleware: ', plugin.middleware)
+      if(plugin.middleware instanceof Array) {
+        this.log('Array of middleware')
+        plugin.middleware.forEach((mw: MiddlewareBase) => this.registerMiddleware(mw))
+      } else {
+        this.log('Single middleware')
+        this.registerMiddleware(plugin.middleware as MiddlewareBase)
+      }
+    }
+  }
+
+  private registerMiddleware(middleware: MiddlewareBase) {
+    this.log('Registering middleware: ', middleware)
+    if(this._middleware === undefined) {
+      this._middleware = []
+    }
+    this._middleware.push(middleware)
+  }
+
+  private registerCommand(command: DiscordCommandBase) {
+    this.log('Registering command: ', command)
+    this._commands[command.config.commandText] = command.exec
+  }
+
+  async addDatastore(datastorAdapter: IDatastoreAdapter) {
+    this._datastoreAdapter = datastorAdapter
+    if(this._datastoreAdapter.init !== undefined) {
+      await this._datastoreAdapter.init();
     }
   }
 
@@ -71,11 +112,10 @@ class Bot {
 
   private buildContext(message: Discord.Message): Context {
     const context = new Context();
-    if(this._datastoreAdapters !== undefined) {
-      this._datastoreAdapters.forEach(dsa => {
-        context.datastores[dsa.identifier] = dsa;
-      })
+    if(this._datastoreAdapter !== null) {
+      context.datastore = this._datastoreAdapter;
     }
+    context.message = message;
     return context;
   }
 
@@ -96,7 +136,7 @@ class Bot {
       if(message.content.startsWith(options.prefix)) {
         const cmd = message.content.split(' ')[1];
         if(this._commands[cmd]) {
-          this._commands[cmd](message)
+          this._commands[cmd](context)
         }
       }
     })

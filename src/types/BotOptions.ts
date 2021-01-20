@@ -8,6 +8,7 @@ type BotOptions = {
   allowBotToBotInteraction?: boolean;
   onReady?(message: Message): void;
   enableApi?: boolean;
+  debugMode?: boolean;
 }
 
 export default BotOptions

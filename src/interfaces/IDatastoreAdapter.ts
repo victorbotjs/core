@@ -1,7 +1,8 @@
 interface IDatastoreAdapter {
   identifier: string;
-  init(): void;
-  save(): void;
+  init?(): Promise<void>;
+  save(key: string, data: any): Promise<void>;
+  fetch(key: string): Promise<any>;
 }
 
 export default IDatastoreAdapter

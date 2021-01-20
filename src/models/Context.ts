@@ -2,7 +2,7 @@ import Discord from "discord.js"
 import IDatastoreAdapter from "../interfaces/IDatastoreAdapter"
 
 class Context {
-  datastores: {[key: string]: IDatastoreAdapter} = {}
+  datastore?: IDatastoreAdapter;
   message?: Discord.Message;
 }
 

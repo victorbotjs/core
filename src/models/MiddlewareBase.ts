@@ -1,4 +1,5 @@
 import Context from "./Context";
+import UsableTypeEnum from '../enums/UsableTypeEnum'
 
 class MiddlewareBase {
   readonly type = UsableTypeEnum.Middleware;
